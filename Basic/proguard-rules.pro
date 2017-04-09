@@ -22,6 +22,8 @@
 
 -dontwarn org.apache.http.**
 -dontwarn android.net.http.**
+-dontnote android.net.http.**
+-dontnote org.apache.http.**
 #-keep class com.google.android.gms.** { *; }
 -dontwarn com.google.android.gms.**
 -dontwarn android.net.http.AndroidHttpClient
