@@ -22,7 +22,7 @@
 
 -dontwarn org.apache.http.**
 -dontwarn android.net.http.**
--keep class com.google.android.gms.** { *; }
+#-keep class com.google.android.gms.** { *; }
 -dontwarn com.google.android.gms.**
 -dontwarn android.net.http.AndroidHttpClient
 -dontwarn com.android.volley.toolbox.**
