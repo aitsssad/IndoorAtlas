@@ -28,6 +28,7 @@
 -dontwarn com.google.android.gms.**
 -dontwarn android.net.http.AndroidHttpClient
 -dontwarn com.android.volley.toolbox.**
+-dontwarn com.fasterxml.jackson.databind.**
 
 # Required by IndoorAtlas SDK
 -keep public class com.indooratlas.algorithm.ClientProcessingManager { *; }
