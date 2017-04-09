@@ -14,7 +14,9 @@ machine:
 
   # Add some environment variables
   environment:
-    CIRCLE_ENV: test
+    #CIRCLE_ENV: test
+
+    GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
 
     ANDROID_HOME: /usr/local/android-sdk-linux
 
