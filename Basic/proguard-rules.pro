@@ -24,6 +24,8 @@
 -dontwarn android.net.http.**
 -keep class com.google.android.gms.** { *; }
 -dontwarn com.google.android.gms.**
+-dontwarn android.net.http.AndroidHttpClient
+-dontwarn com.android.volley.toolbox.**
 
 # Required by IndoorAtlas SDK
 -keep public class com.indooratlas.algorithm.ClientProcessingManager { *; }
