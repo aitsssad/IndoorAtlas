@@ -1,31 +1,32 @@
 /*
  *
  */
-package com.indooratlas.android.sdk.examples.credentials;
+package com.indooratlas.android.sdk.examples.mocks;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.location.Criteria;
+import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
 import android.util.Log;
+import android.widget.TextView;
+import android.os.SystemClock;
+import android.widget.Toast;
+
+import com.firebase.client.Firebase;
 import com.indooratlas.android.sdk.IALocation;
 import com.indooratlas.android.sdk.IALocationListener;
 import com.indooratlas.android.sdk.IALocationManager;
-import com.indooratlas.android.sdk.IALocationRequest;
 import com.indooratlas.android.sdk.examples.R;
 import com.indooratlas.android.sdk.examples.SdkExample;
-import android.provider.Settings.SettingNotFoundException;
-import com.firebase.client.Firebase;
-import android.widget.Toast;
 
-
+import java.lang.reflect.Method;
 import java.util.Locale;
 
 
@@ -38,7 +39,7 @@ import java.util.Locale;
  * This example demonstrates option b).
  */
 @SdkExample(description = R.string.example_credentials_description)
-public class CredentialsFromCodeActivity extends AppCompatActivity implements IALocationListener {
+public class MockActivity extends AppCompatActivity implements IALocationListener {
     private static final int MY_PERMISSION_ACCESS_COARSE_LOCATION = 11;
     private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 12;
     private IALocationManager mLocationManager;
@@ -47,7 +48,8 @@ public class CredentialsFromCodeActivity extends AppCompatActivity implements IA
     private final int CODE_PERMISSIONS = 1001;
     private TextView mLog;
     private Firebase mRef;
-    private static final String TAG = CredentialsFromCodeActivity.class.getSimpleName();
+    MockLocationProvider mock;
+    private static final String TAG = MockActivity.class.getSimpleName();
     @SuppressWarnings("unchecked")
     @Override
 
@@ -61,18 +63,41 @@ public class CredentialsFromCodeActivity extends AppCompatActivity implements IA
                 Manifest.permission.CHANGE_WIFI_STATE,
                 Manifest.permission.ACCESS_WIFI_STATE,
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_COARSE_LOCATION,
         };
         ActivityCompat.requestPermissions( this, neededPermissions, CODE_PERMISSIONS );
-        Bundle extras = new Bundle(2);
-        extras.putString(IALocationManager.EXTRA_API_KEY,
-                getString(R.string.indooratlas_api_key));
-        extras.putString(IALocationManager.EXTRA_API_SECRET,
-                getString(R.string.indooratlas_api_secret));
+        mock = new MockLocationProvider(LocationManager.NETWORK_PROVIDER, this);
+        mock.pushLocation(-12.34, 23.45);
+
+        final String providerName = "MyFancyGPSProvider";
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        String bestProvider = locationManager.getBestProvider(criteria, false);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        if (locationManager.getProvider(providerName) != null) {
+            locationManager.removeTestProvider(providerName);
+        }
+        locationManager.addTestProvider(providerName, true, false, false, false, true, true, true,
+                Criteria.POWER_LOW, Criteria.ACCURACY_FINE);
+        Location loc = new Location(providerName);
+        try {
+            Method makeComplete = Location.class.getMethod("makeComplete");
+            if (makeComplete != null) {
+                makeComplete.invoke(loc);
+            }
+        } catch (Exception e) {
+            //Method only available in Jelly Bean
+        }
+        loc.setLongitude(13);
+        loc.setTime(System.currentTimeMillis());
+        loc.setLatitude(10);
+        loc.setAccuracy(1000);
+        locationManager.setTestProviderLocation(LocationManager.NETWORK_PROVIDER, loc);
+        locationManager.setTestProviderStatus(LocationManager.NETWORK_PROVIDER,
+                LocationProvider.AVAILABLE,
+                null,System.currentTimeMillis());
+
+        locationManager.setTestProviderLocation(LocationManager.NETWORK_PROVIDER, loc);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "HEREeeee");
             return;
         }
@@ -93,29 +118,7 @@ public class CredentialsFromCodeActivity extends AppCompatActivity implements IA
                     Log.d(TAG, "in on location changed");
                     Log.d(TAG, "Latitude: " + location.getLatitude());
                     Log.d(TAG, "Latitude: " + location.getLongitude());
-                    Firebase mRefChild = mRef.child("Location");
-                    mRefChild.push().setValue(location.getLatitude()+ ",   "+location.getLongitude());
 
-                    //geo fencing
-
-                    Location locationA = new Location("point A");
-
-                    locationA.setLatitude(location.getLatitude());
-                    locationA.setLongitude(location.getLongitude());
-
-                    Location locationB = new Location("point B");
-
-                    locationB.setLatitude(51.52180652);
-                    locationB.setLongitude(-0.13020650);
-
-                    float distance = locationA.distanceTo(locationB);
-                    Log.d(TAG, "Location: ");
-                    Log.d(TAG, "Location: " + distance);
-                    if(distance <= 3)  //> 10000 //for testing purposes
-                    {
-                        Log.d(TAG, "outside location ");
-                        Toast.makeText(CredentialsFromCodeActivity.this,"You are within 3 meters of location",Toast.LENGTH_SHORT).show();
-                    }
                 }
 
                 @Override
@@ -133,10 +136,8 @@ public class CredentialsFromCodeActivity extends AppCompatActivity implements IA
                 }
             };
 
-            //update location every 10sec in 500m radius with both provider GPS and Network.
 
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 2, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, locationListener);
         //51.52180652, -0.13020650 to set the constant location
 
 

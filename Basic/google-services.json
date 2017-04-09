@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "375973552943",
+    "firebase_url": "https://indooratlasexample-724f5.firebaseio.com",
+    "project_id": "indooratlasexample-724f5",
+    "storage_bucket": "indooratlasexample-724f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375973552943:android:ee0b0cba5a84ffe2",
+        "android_client_info": {
+          "package_name": "com.indooratlas.android.sdk.examples"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "375973552943-t7u0j54c4foam9582oal91dinuhbmr5v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.indooratlas.android.sdk.examples",
+            "certificate_hash": "8a3368651cc8b740a6999ecb17c866b274ad932e"
+          }
+        },
+        {
+          "client_id": "375973552943-jj849td296ear17f2pvbp1imaijca40m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0fPIhdwmmiRzO2-WOMYyuJFtSYkeV4ng"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "375973552943-jj849td296ear17f2pvbp1imaijca40m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

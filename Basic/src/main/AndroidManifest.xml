@@ -3,15 +3,25 @@
     package="com.indooratlas.android.sdk.examples">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -22,8 +32,8 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyACxnY4O-tiZ24jvaWAbXTaGlOqtO8Dhsw" />
         <meta-data
             android:name="com.indooratlas.android.sdk.API_KEY"
             android:value="@string/indooratlas_api_key" />
@@ -49,14 +59,6 @@
             android:label="@string/example_imageview_title"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".googlemaps.MapsActivity"
-            android:label="@string/example_googlemaps_basic_title"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".mapsoverlay.MapsOverlayActivity"
-            android:label="@string/example_googlemaps_overlay_title"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".sharelocation.ShareLocationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/example_sharelocation_title" />
@@ -74,7 +76,9 @@
             android:name=".orientation.OrientationActivity"
             android:label="@string/example_orientation_title"
             android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".mocks.MockActivity"
+            android:label="Ge Mock Data" />
         <service
             android:name=".background.LocationStoreService"
             android:exported="false"></service>

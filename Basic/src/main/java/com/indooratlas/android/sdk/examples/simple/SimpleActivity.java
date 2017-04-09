@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,11 +16,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.indooratlas.android.sdk.IALocation;
 import com.indooratlas.android.sdk.IALocationListener;
 import com.indooratlas.android.sdk.IALocationManager;
 import com.indooratlas.android.sdk.IALocationRequest;
 import com.indooratlas.android.sdk.IARegion;
+import com.indooratlas.android.sdk.examples.Manifest;
 import com.indooratlas.android.sdk.examples.R;
 import com.indooratlas.android.sdk.examples.SdkExample;
 
@@ -42,10 +45,16 @@ public class SimpleActivity extends AppCompatActivity
 
     private long mFastestInterval = -1L;
     private float mShortestDisplacement = -1f;
-
+    private Firebase mRef;
+    private final int CODE_PERMISSIONS = 100;
     @SuppressWarnings("unchecked")
-    @Override
     public void onCreate(Bundle savedInstanceState) {
+        String[] neededPermissions = {
+                android.Manifest.permission.CHANGE_WIFI_STATE,
+                android.Manifest.permission.ACCESS_WIFI_STATE,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+        };
+        ActivityCompat.requestPermissions( this, neededPermissions, CODE_PERMISSIONS );
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
@@ -57,6 +66,13 @@ public class SimpleActivity extends AppCompatActivity
         mLog = (TextView) findViewById(R.id.text);
         mScrollView = (ScrollView) findViewById(R.id.scroller);
         mLocationManager = IALocationManager.create(this);
+        Firebase.setAndroidContext(this);
+        mRef = new Firebase("https://indooratlasexample-724f5.firebaseio.com/");
+    }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        //Handle if any of the permissions are denied, in grantResults
     }
 
     @Override
@@ -99,6 +115,10 @@ public class SimpleActivity extends AppCompatActivity
 
     public void requestUpdates(View view) {
         setLocationRequestOptions();
+        Firebase mRefChild = mRef.child("Location");
+        mRefChild.setValue("here");
+        Firebase mRefChild2 = mRef.child("Location");
+        mRefChild2.setValue("here");
     }
 
     public void removeUpdates(View view) {
@@ -112,9 +132,13 @@ public class SimpleActivity extends AppCompatActivity
 
     @Override
     public void onLocationChanged(IALocation location) {
+        log("locationChanged");
         log(String.format(Locale.US, "%f,%f, accuracy: %.2f, certainty: %.2f",
                 location.getLatitude(), location.getLongitude(), location.getAccuracy(),
                 location.getFloorCertainty()));
+        Firebase mRefChild = mRef.child("Location1");
+        mRefChild.setValue(location.getLongitude());
+
     }
 
     @Override

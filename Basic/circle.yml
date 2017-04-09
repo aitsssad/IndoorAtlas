@@ -1,0 +1,11 @@
+#
+# Circle CI Configuration File
+#
+
+## Customize the test machine
+machine:
+
+  # Add some environment variables
+  environment:
+    CIRCLE_ENV: test
+    ANDROID_HOME: /usr/local
