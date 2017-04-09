@@ -1,7 +1,7 @@
 #
 # Circle CI Configuration File
 # references - https://circleci.com/docs/1.0/config-sample/
-# 
+#
 #
 
 
@@ -23,11 +23,11 @@ dependencies:
     #pre:
     #  - echo y | android update sdk --no-ui --all --filter "android-24, build-tools-25.0.2"
     override:
-        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-21.1.2,android-21,extra-google-m2repository,extra-google-google_play_services,extra-android-support
+        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.2,android-23,extra-google-m2repository,extra-google-google_play_services,extra-android-support
         - chmod +x gradlew
         - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 
 test:
     override:
         - (./gradlew assemble):
-            timeout: 360
+           # timeout: 360
