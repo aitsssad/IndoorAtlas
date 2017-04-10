@@ -23,3 +23,14 @@ Github Url
 
 https://github.com/aitsssad/IndoorAtlas
 
+ #OTHER
+
+Online references
+
+Development help. Available at http://docs.indooratlas.com/android/
+
+Example Code Help. Available at https://github.com/aitsssad/IndoorAtlas
+
+FireBase Online help Available at https://www.youtube.com/watch?v=hoF5A30fbu4&index=5&list=PLGCjwl1RrtcTXrWuRTa59RyRmQ4OedWrt
+
+Mock test Code Help. Available at https://mobiarch.wordpress.com/2012/07/17/testing-with-mock-location-data-in-android/
