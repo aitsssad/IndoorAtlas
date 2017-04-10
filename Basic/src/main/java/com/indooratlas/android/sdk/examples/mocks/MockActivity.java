@@ -18,7 +18,6 @@ import android.util.Log;
 import android.widget.TextView;
 import android.os.SystemClock;
 import android.widget.Toast;
-
 import com.firebase.client.Firebase;
 import com.indooratlas.android.sdk.IALocation;
 import com.indooratlas.android.sdk.IALocationListener;
@@ -28,7 +27,6 @@ import com.indooratlas.android.sdk.examples.SdkExample;
 
 import java.lang.reflect.Method;
 import java.util.Locale;
-
 
 /**
  * There are two ways of setting credentials:
@@ -66,36 +64,11 @@ public class MockActivity extends AppCompatActivity implements IALocationListene
                 Manifest.permission.ACCESS_COARSE_LOCATION,
         };
         ActivityCompat.requestPermissions( this, neededPermissions, CODE_PERMISSIONS );
+
+
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         mock = new MockLocationProvider(LocationManager.NETWORK_PROVIDER, this);
         mock.pushLocation(-12.34, 23.45);
-
-        final String providerName = "MyFancyGPSProvider";
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        if (locationManager.getProvider(providerName) != null) {
-            locationManager.removeTestProvider(providerName);
-        }
-        locationManager.addTestProvider(providerName, true, false, false, false, true, true, true,
-                Criteria.POWER_LOW, Criteria.ACCURACY_FINE);
-        Location loc = new Location(providerName);
-        try {
-            Method makeComplete = Location.class.getMethod("makeComplete");
-            if (makeComplete != null) {
-                makeComplete.invoke(loc);
-            }
-        } catch (Exception e) {
-            //Method only available in Jelly Bean
-        }
-        loc.setLongitude(13);
-        loc.setTime(System.currentTimeMillis());
-        loc.setLatitude(10);
-        loc.setAccuracy(1000);
-        locationManager.setTestProviderLocation(LocationManager.NETWORK_PROVIDER, loc);
-        locationManager.setTestProviderStatus(LocationManager.NETWORK_PROVIDER,
-                LocationProvider.AVAILABLE,
-                null,System.currentTimeMillis());
-
-        locationManager.setTestProviderLocation(LocationManager.NETWORK_PROVIDER, loc);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "HEREeeee");
@@ -103,12 +76,7 @@ public class MockActivity extends AppCompatActivity implements IALocationListene
         }
         //it worked fine to get last location
         /*android.location.Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        Log.d(TAG, "HERE");
-        Log.d(TAG, "Latitude: " + location);
-        Log.d(TAG, "Latitude: " + location.getLatitude());
-        Log.d(TAG, "Latitude: " + location.getLongitude());*/
-        //mLocationManager = IALocationManager.create(this, extras);
-            Log.d(TAG, "HEREEE");
+        */
 
             final LocationListener locationListener = new LocationListener() {
                 @Override

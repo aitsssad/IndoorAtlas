@@ -35,7 +35,9 @@ android {
             keyPassword "android"
         }
     }
-
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
     buildTypes {
         debug {
             debuggable true
